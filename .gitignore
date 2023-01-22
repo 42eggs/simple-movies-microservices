@@ -1,0 +1,18 @@
+# Django specific files
+__pycache__/
+*.pyc
+*.pyo
+*.env
+
+# MySQL specific files
+*.cnf
+*.sock
+*.log
+*.pid
+
+# SQLite specific files
+*.db
+
+# OS generated files
+.DS_Store
+Thumbs.db
