@@ -6,13 +6,14 @@ app.app_context().push()
 db.create_all()
 
 
-params = pika.URLParameters('rabbitmqurl')
+params = pika.URLParameters('your-rabbit-mq-url')
 
 connection = pika.BlockingConnection(params)
 
 channel = connection.channel()
 
 channel.queue_declare(queue='main')
+
 
 def callback(channel, method, properties, body):
     print('Receieved in main')
@@ -21,7 +22,8 @@ def callback(channel, method, properties, body):
 
     if properties.content_type == 'movie_created':
         with app.app_context():
-            movie = Movie(id=data['id'], title=data['title'], image=data['image'])
+            movie = Movie(
+                id=data['id'], title=data['title'], image=data['image'])
             db.session.add(movie)
             db.session.commit()
         print('Product Created')
@@ -42,7 +44,8 @@ def callback(channel, method, properties, body):
         print('Product Deleted')
 
 
-channel.basic_consume(queue='main', on_message_callback=callback, auto_ack=True)
+channel.basic_consume(
+    queue='main', on_message_callback=callback, auto_ack=True)
 
 print('Started Consuming')
 

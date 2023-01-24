@@ -1,11 +1,15 @@
-import pika, json, os, django
+
+from movies.models import Movie
+import pika
+import json
+import os
+import django
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'admin.settings')
 django.setup()
 
-from movies.models import Movie
 
-params = pika.URLParameters('rabbitmqurl')
+params = pika.URLParameters('your-rabbit-mq-url')
 connection = pika.BlockingConnection(params)
 channel = connection.channel()
 channel.queue_declare(queue='admin')
@@ -21,7 +25,8 @@ def callback(channel, method, properties, body):
     print('Movie likes increased')
 
 
-channel.basic_consume(queue='admin', on_message_callback=callback, auto_ack=True)
+channel.basic_consume(
+    queue='admin', on_message_callback=callback, auto_ack=True)
 
 print('Started consuming')
 

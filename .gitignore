@@ -9,6 +9,8 @@ __pycache__/
 *.sock
 *.log
 *.pid
+*.dbdata
+dbdata/
 
 # SQLite specific files
 *.db
